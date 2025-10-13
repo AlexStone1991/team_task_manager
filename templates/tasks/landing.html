@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="features">
+    <div class="feature-card">
+        <h3>📋 Управление задачами</h3>
+        <p>Создавайте, назначайте и отслеживайте задачи в команде. Полный контроль над workflow.</p>
+        <a href="/admin/tasks/task/" class="btn">Управление задачами</a>
+    </div>
+    
+    <div class="feature-card">
+        <h3>🔗 REST API</h3>
+        <p>Мощный JSON API для интеграции с мобильными приложениями и другими системами.</p>
+        <a href="/api/tasks/" class="btn">Перейти к API</a>
+    </div>
+    
+    <div class="feature-card">
+    <h3>🌐 Веб-интерфейс</h3>
+    <p>Удобное управление задачами через браузер с реальным временем</p>
+    <a href="/my-tasks/" class="btn">Мои задачи</a>
+</div>
+</div>
+
+<div class="quick-start">
+    <h3>📊 Быстрый старт</h3>
+    <ol>
+        <li><strong>Создайте пользователей</strong> в <a href="/admin/users/user/">админке</a></li>
+        <li><strong>Назначьте задачи</strong> через <a href="/admin/tasks/task/">раздел задач</a></li>
+        <li><strong>Проверьте API</strong> по <a href="/api/tasks/">ссылке</a> (требуется авторизация)</li>
+        <li><strong>Telegram бот</strong> будет доступен в следующем обновлении</li>
+    </ol>
+    
+    <div class="tech-stack">
+        <h4>🎯 Технологии проекта:</h4>
+        <ul>
+            <li><strong>Backend:</strong> Django 4.2 + Django REST Framework</li>
+            <li><strong>Database:</strong> SQLite (для разработки)</li>
+            <li><strong>Frontend:</strong> Чистый HTML/CSS/JS</li>
+            <li><strong>Telegram:</strong> Aiogram 3.x</li>
+            <li><strong>Package manager:</strong> Poetry</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

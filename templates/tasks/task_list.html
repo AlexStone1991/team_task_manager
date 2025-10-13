@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Мои задачи - Team Task Manager{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>📋 Мои задачи</h1>
+    <p>Привет, {{ user.username }}! Здесь твои текущие задачи</p>
+</div>
+
+{% csrf_token %}
+
+<div class="task-controls">
+    <button onclick="loadTasks()" class="btn">🔄 Обновить</button>
+    <span id="last-updated"></span>
+</div>
+
+<div id="tasks-container">
+    <div class="loading">Загрузка задач...</div>
+</div>
+
+<script src="{% static 'js/task_manager.js' %}"></script>
+{% endblock %}
