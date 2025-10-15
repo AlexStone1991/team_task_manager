@@ -8,18 +8,46 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
-    <div class="header">
-        <h1>🚀 Team Task Manager</h1>
-        <p>Система управления задачами в команде с Telegram ботом</p>
-    </div>
+    <!-- НАВИГАЦИОННОЕ МЕНЮ -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="{% url 'home' %}">🚀 Team Task Manager</a>
+            </div>
+            
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <!-- Меню для авторизованных пользователей -->
+                    <a href="{% url 'my_tasks' %}" class="nav-link">📋 Мои задачи</a>
+                    
+                    {% if user.is_staff %}
+                        <!-- Меню только для админов -->
+                        <a href="/admin/" class="nav-link admin-link">⚙️ Админка</a>
+                        <a href="/admin/tasks/task/" class="nav-link admin-link">➕ Создать задачу</a>
+                    {% endif %}
+                    
+                    <div class="nav-user">
+                        <span class="username">👤 {{ user.username }}</span>
+                        <a href="{% url 'logout' %}" class="nav-link logout">🚪 Выйти</a>
+                    </div>
+                {% else %}
+                    <!-- Меню для гостей -->
+                    <a href="{% url 'login' %}" class="nav-link">🔐 Вход</a>
+                    <a href="{% url 'register' %}" class="nav-link">📝 Регистрация</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
 
-    <main>
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="main-content">
         {% block content %}
         {% endblock %}
     </main>
 
-    <footer>
-        <p>Тестовое задание - Django + DRF + Telegram Bot</p>
+    <!-- ФУТЕР -->
+    <footer class="footer">
+        <p>Team Task Manager - Система управления задачами с Telegram ботом</p>
     </footer>
 
     <script src="{% static 'js/main.js' %}"></script>

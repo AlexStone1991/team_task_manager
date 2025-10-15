@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API - Team Task Manager</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .api-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .api-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        .api-nav {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .api-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.2rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .api-nav a:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .api-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+        
+        .api-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .api-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .api-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .api-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-api {
+            background: #9775fa;
+        }
+        
+        .btn-admin {
+            background: #51cf66;
+        }
+        
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="api-header">
+        <h1>🚀 Team Task Manager API</h1>
+        <div class="api-nav">
+            <a href="{% url 'home' %}">🏠 Главная</a>
+            {% if user.is_staff %}
+                <a href="/admin/">⚙️ Админка</a>
+                <a href="{% url 'quick_create' %}">📋 Создать задачу</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">🚪 Выйти</a>
+            {% else %}
+                <a href="{% url 'login' %}">🔐 Войти</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="api-container">
+        <div class="api-info">
+            <h2>📚 Документация API</h2>
+            <p>REST API для интеграции с системой управления задачами. Все endpoints требуют аутентификации.</p>
+            
+            <div class="api-links">
+                <div class="api-card">
+                    <h3>🔗 Основное API</h3>
+                    <p><strong>URL:</strong> <code>/api-drf/tasks/</code></p>
+                    <p>Полный REST API с интерфейсом Django REST Framework</p>
+                    <a href="/api-drf/tasks/" class="btn btn-api">📋 Открыть DRF API</a>
+                </div>
+                
+                <div class="api-card">
+                    <h3>👤 Мои задачи</h3>
+                    <p><strong>GET:</strong> <code>/api/my-tasks/</code></p>
+                    <p>Получить список задач текущего пользователя (JSON)</p>
+                    <a href="/api/my-tasks/" class="btn">📝 Мои задачи (JSON)</a>
+                </div>
+                
+                <div class="api-card">
+                    <h3>✅ Завершение задач</h3>
+                    <p><strong>POST:</strong> <code>/api/complete-task/&lt;id&gt;/</code></p>
+                    <p>Отметить задачу как выполненную</p>
+                </div>
+            </div>
+        </div>
+        
+        {% if user.is_staff %}
+        <div class="api-info">
+            <h2>👑 Для администраторов</h2>
+            <div class="api-links">
+                <div class="api-card">
+                    <h3>⚙️ Панель администратора</h3>
+                    <p>Полный контроль над пользователями и задачами</p>
+                    <a href="/admin/" class="btn btn-admin">⚙️ Открыть админку</a>
+                </div>
+                
+                <div class="api-card">
+                    <h3>📊 Управление задачами</h3>
+                    <p>Просмотр и управление всеми задачами системы</p>
+                    <a href="/admin/tasks/task/" class="btn btn-admin">📊 Все задачи</a>
+                </div>
+                
+                <div class="api-card">
+                    <h3>👥 Управление пользователями</h3>
+                    <p>Создание и редактирование пользователей</p>
+                    <a href="/admin/users/user/" class="btn btn-admin">👥 Пользователи</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="api-info">
+            <h2>🔧 Примеры запросов</h2>
+            <div class="api-card">
+                <h3>📋 Получить задачи пользователя</h3>
+                <pre><code>GET /api/my-tasks/
+Authorization: Session auth
+</code></pre>
+            </div>
+            
+            <div class="api-card">
+                <h3>✅ Завершить задачу</h3>
+                <pre><code>POST /api/complete-task/123/
+Headers: 
+  X-CSRFToken: ваш_токен
+  Content-Type: application/json
+</code></pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

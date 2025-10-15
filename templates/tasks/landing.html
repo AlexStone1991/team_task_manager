@@ -2,42 +2,80 @@
 {% load static %}
 
 {% block content %}
+<div class="header">
+    <h1>🚀 Team Task Manager</h1>
+    <p>Мощная система управления задачами с реальным временем и Telegram ботом</p>
+</div>
+
 <div class="features">
     <div class="feature-card">
         <h3>📋 Управление задачами</h3>
         <p>Создавайте, назначайте и отслеживайте задачи в команде. Полный контроль над workflow.</p>
-        <a href="/admin/tasks/task/" class="btn">Управление задачами</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_tasks' %}" class="btn">Перейти к задачам</a>
+        {% else %}
+            <a href="{% url 'register' %}" class="btn">Начать работу</a>
+        {% endif %}
     </div>
     
     <div class="feature-card">
         <h3>🔗 REST API</h3>
         <p>Мощный JSON API для интеграции с мобильными приложениями и другими системами.</p>
-        <a href="/api/tasks/" class="btn">Перейти к API</a>
+        <!-- ИСПРАВЛЕННАЯ ССЫЛКА - БЫЛО /api/tasks/ -->
+        <a href="{% url 'api_wrapper' %}" class="btn">Изучить API</a>
     </div>
     
     <div class="feature-card">
-    <h3>🌐 Веб-интерфейс</h3>
-    <p>Удобное управление задачами через браузер с реальным временем</p>
-    <a href="/my-tasks/" class="btn">Мои задачи</a>
+        <h3>🤖 Telegram Bot</h3>
+        <p>Получайте уведомления и управляйте задачами через Telegram в реальном времени.</p>
+        <p><strong>Команды:</strong> /start, /tasks, /game, /ask</p>
+        <span class="badge">AI + Игры</span>
+    </div>
+    
+    <div class="feature-card">
+        <h3>🌐 Веб-интерфейс</h3>
+        <p>Удобное управление задачами через браузер с реальным временем и WebSocket.</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_tasks' %}" class="btn">Открыть интерфейс</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn">Войти в систему</a>
+        {% endif %}
+    </div>
 </div>
+
+<!-- ФОРМА ДЛЯ АДМИНОВ -->
+{% if user.is_staff %}
+<div class="feature-card" style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
+    <h3>👑 Панель администратора</h3>
+    <p>Быстрое управление системой</p>
+    
+    <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <a href="{% url 'quick_create' %}" class="btn" style="background: #667eea;">➕ Быстрое создание</a>
+        <a href="/admin/tasks/task/" class="btn" style="background: #51cf66;">📊 Все задачи</a>
+        <a href="/admin/users/user/" class="btn" style="background: #ffa94d;">👥 Пользователи</a>
+        <a href="{% url 'api_wrapper' %}" class="btn" style="background: #9775fa;">🔗 API</a>
+    </div>
 </div>
+{% endif %}
 
 <div class="quick-start">
     <h3>📊 Быстрый старт</h3>
     <ol>
-        <li><strong>Создайте пользователей</strong> в <a href="/admin/users/user/">админке</a></li>
-        <li><strong>Назначьте задачи</strong> через <a href="/admin/tasks/task/">раздел задач</a></li>
-        <li><strong>Проверьте API</strong> по <a href="/api/tasks/">ссылке</a> (требуется авторизация)</li>
-        <li><strong>Telegram бот</strong> будет доступен в следующем обновлении</li>
+        <li><strong>Зарегистрируйтесь</strong> в системе</li>
+        <li><strong>Настройте Telegram</strong> - укажите username в профиле</li>
+        <li><strong>Напишите боту</strong> /start для привязки</li>
+        <li><strong>Создавайте задачи</strong> через веб-интерфейс</li>
+        <li><strong>Получайте уведомления</strong> в реальном времени</li>
     </ol>
     
     <div class="tech-stack">
         <h4>🎯 Технологии проекта:</h4>
         <ul>
             <li><strong>Backend:</strong> Django 4.2 + Django REST Framework</li>
-            <li><strong>Database:</strong> SQLite (для разработки)</li>
+            <li><strong>Real-time:</strong> Django Channels + WebSockets</li>
             <li><strong>Frontend:</strong> Чистый HTML/CSS/JS</li>
-            <li><strong>Telegram:</strong> Aiogram 3.x</li>
+            <li><strong>Telegram:</strong> Aiogram 3.x + FSM</li>
+            <li><strong>AI:</strong> Mistral API интеграция</li>
             <li><strong>Package manager:</strong> Poetry</li>
         </ul>
     </div>

@@ -1,0 +1,81 @@
+{% extends "rest_framework/base.html" %}
+{% load static %}
+
+{% block style %}
+    {{ block.super }}
+    <style>
+        .drf-navigation {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 2rem;
+            margin: -20px -20px 20px -20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .drf-home-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .drf-home-link:hover {
+            color: #e0e0e0;
+        }
+        
+        .drf-user-info {
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .drf-admin-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .drf-admin-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .drf-admin-link:hover {
+            background: rgba(255,255,255,0.1);
+        }
+    </style>
+{% endblock %}
+
+{% block branding %}
+    <!-- Переопределяем branding чтобы добавить навигацию -->
+{% endblock %}
+
+{% block breadcrumbs %}
+    <!-- Добавляем кастомную навигацию -->
+    <div class="drf-navigation">
+        <a href="{% url 'home' %}" class="drf-home-link">
+            🏠 Вернуться на главную
+        </a>
+        
+        <div class="drf-admin-links">
+            {% if user.is_authenticated %}
+                <span class="drf-user-info">👤 {{ user.username }}</span>
+                {% if user.is_staff %}
+                    <a href="/admin/" class="drf-admin-link">⚙️ Админка</a>
+                    <a href="{% url 'home' %}" class="drf-admin-link">📋 Создать задачу</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}" class="drf-admin-link">🔐 Войти</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    {{ block.super }}
+{% endblock %}

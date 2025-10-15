@@ -5,5 +5,6 @@ from tasks.views import landing
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', landing, name='home'),
-    path('', include('tasks.urls')),  # Добавляем API URLs
+    path('', include('tasks.urls')),
+    path('accounts/', include('users.urls')),
 ]

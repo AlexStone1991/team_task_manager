@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Быстрое создание задачи - Team Task Manager{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>🚀 Быстрое создание задачи</h1>
+    <p>Создайте новую задачу без перехода в админку</p>
+</div>
+
+<div class="feature-card" style="max-width: 600px; margin: 0 auto;">
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 1rem;">
+            <label><strong>📝 Название задачи:</strong></label>
+            {{ form.title }}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label><strong>📄 Описание:</strong></label>
+            {{ form.description }}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label><strong>👤 Исполнитель:</strong></label>
+            {{ form.assigned_to }}
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label><strong>📅 Срок выполнения:</strong></label>
+            {{ form.due_date }}
+        </div>
+        
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn" style="background: #51cf66;">✅ Создать задачу</button>
+            <a href="{% url 'home' %}" class="btn" style="background: #ff6b6b;">❌ Отмена</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    input[type="text"], input[type="datetime-local"], select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    
+    textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+    
+    select {
+        height: 45px;
+    }
+</style>
+{% endblock %}

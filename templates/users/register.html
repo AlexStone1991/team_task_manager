@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Регистрация - Team Task Manager{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>📝 Регистрация</h1>
+    <p>Создайте аккаунт для доступа к системе</p>
+</div>
+
+<div class="feature-card" style="max-width: 500px; margin: 0 auto;">
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.errors %}
+        <div style="color: #ff6b6b; margin-bottom: 1rem;">
+            Пожалуйста, исправьте ошибки ниже
+        </div>
+        {% endif %}
+        
+        <div style="margin-bottom: 1rem;">
+            <label><strong>👤 Имя пользователя:</strong></label>
+            {{ form.username }}
+            {% if form.username.errors %}
+            <div style="color: #ff6b6b; font-size: 0.9rem;">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label><strong>📱 Телефон:</strong></label>
+            {{ form.phone }}
+            <div style="font-size: 0.8rem; color: #666;">Формат: +79991234567</div>
+            {% if form.phone.errors %}
+            <div style="color: #ff6b6b; font-size: 0.9rem;">{{ form.phone.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label><strong>🤖 Telegram username:</strong></label>
+            {{ form.telegram_username }}
+            <div style="font-size: 0.8rem; color: #666;">Ваш username в Telegram (без @)</div>
+            {% if form.telegram_username.errors %}
+            <div style="color: #ff6b6b; font-size: 0.9rem;">{{ form.telegram_username.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 1rem;">
+            <label><strong>🔑 Пароль:</strong></label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+            <div style="color: #ff6b6b; font-size: 0.9rem;">{{ form.password1.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 1.5rem;">
+            <label><strong>🔑 Подтверждение пароля:</strong></label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+            <div style="color: #ff6b6b; font-size: 0.9rem;">{{ form.password2.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn" style="width: 100%;">🚀 Зарегистрироваться</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
+        <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите здесь</a></p>
+    </div>
+</div>
+
+<style>
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+    
+    input:focus {
+        border-color: #667eea;
+        outline: none;
+        box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+    }
+</style>
+{% endblock %}

@@ -1,11 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, permissions
 from .models import Task
 from .serializers import TaskSerializer
 from django.contrib.auth.decorators import login_required
 
+from django.contrib.admin.views.decorators import staff_member_required
+from .forms import QuickTaskForm
+from django.contrib import messages
 
+@staff_member_required
+def quick_create_task(request):
+    """Быстрое создание задачи для админов"""
+    if request.method == 'POST':
+        form = QuickTaskForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.created_by = request.user
+            task.save()
+            messages.success(request, f'Задача "{task.title}" создана!')
+            return redirect('home')
+    else:
+        form = QuickTaskForm()
+    
+    return render(request, 'tasks/quick_create.html', {'form': form})
 
 class TaskViewSet(viewsets.ModelViewSet):
     """API для управления задачами"""
@@ -55,3 +73,7 @@ def api_complete_task(request, task_id):
         return JsonResponse({'success': True})
     except Task.DoesNotExist:
         return JsonResponse({'success': False, 'error': 'Задача не найдена'}, status=404)
+    
+def api_wrapper(request):
+    """Обертка для API с нашей навигацией"""
+    return render(request, 'api_wrapper.html')
