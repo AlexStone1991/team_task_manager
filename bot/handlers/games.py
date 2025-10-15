@@ -9,7 +9,7 @@ ROCK = "Камень"
 SCISSORS = "Ножницы"
 PAPER = "Бумага"
 
-@router.message(F.text == "🎮 Режим игры")
+@router.message(StateFilter(UserStates.main_menu), F.text == "🎮 Режим игры")
 async def enter_game_mode(message: types.Message, state: FSMContext):
     """Вход в режим игры"""
     await state.set_state(UserStates.game_mode)

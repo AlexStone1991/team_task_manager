@@ -36,6 +36,7 @@
         .drf-admin-links {
             display: flex;
             gap: 1rem;
+            align-items: center;
         }
         
         .drf-admin-link {
@@ -49,6 +50,11 @@
         
         .drf-admin-link:hover {
             background: rgba(255,255,255,0.1);
+        }
+
+        /* Скрываем стандартную навигацию DRF */
+        .navbar {
+            display: none !important;
         }
     </style>
 {% endblock %}
@@ -71,8 +77,11 @@
                     <a href="/admin/" class="drf-admin-link">⚙️ Админка</a>
                     <a href="{% url 'home' %}" class="drf-admin-link">📋 Создать задачу</a>
                 {% endif %}
+                <!-- ДОБАВИЛ КНОПКУ ВЫХОДА -->
+                <a href="{% url 'logout' %}" class="drf-admin-link">🚪 Выйти</a>
             {% else %}
                 <a href="{% url 'login' %}" class="drf-admin-link">🔐 Войти</a>
+                <a href="{% url 'register' %}" class="drf-admin-link">📝 Регистрация</a>
             {% endif %}
         </div>
     </div>

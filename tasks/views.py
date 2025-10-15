@@ -32,8 +32,13 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     
     def get_queryset(self):
-        # Показываем только задачи текущего пользователя
-        return Task.objects.filter(assigned_to=self.request.user)
+        user = self.request.user
+        if user.is_staff:
+            # Админы видят ВСЕ задачи
+            return Task.objects.all()
+        else:
+            # Обычные пользователи видят только свои задачи
+            return Task.objects.filter(assigned_to=user)
 
 def landing(request):
     """Главная страница с красивым шаблоном"""

@@ -6,3 +6,4 @@ class UserStates(StatesGroup):
     ai_chat = State()        # Режим AI чата
     game_mode = State()      # Режим игры
     viewing_tasks = State()  # Просмотр задач
+    music_menu = State()

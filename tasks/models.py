@@ -3,6 +3,8 @@ from django.conf import settings
 from django.utils import timezone
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from users.models import User
+from rest_framework import serializers
 
 class Task(models.Model):
     STATUS_CHOICES = [
@@ -14,6 +16,7 @@ class Task(models.Model):
     title = models.CharField(max_length=200, verbose_name="Название задачи")
     description = models.TextField(blank=True, verbose_name="Описание задачи")
     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Назначена пользователю")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_tasks')
     due_date = models.DateTimeField(verbose_name="Срок выполнения")
     status = models.CharField(
         max_length=20, 

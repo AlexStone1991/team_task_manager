@@ -20,7 +20,7 @@ async def ask_ai_command(message: types.Message):
     await process_ai_question(message, question)
 
 # ==================== РЕЖИМ AI ====================
-@router.message(F.text == "🤖 Режим AI")
+@router.message(StateFilter(UserStates.main_menu), F.text == "🤖 Режим AI")
 async def enter_ai_mode(message: types.Message, state: FSMContext):
     """Вход в режим AI чата"""
     await state.set_state(UserStates.ai_chat)
@@ -60,10 +60,14 @@ async def handle_ai_chat(message: types.Message):
 @router.message(StateFilter(UserStates.main_menu), F.text & ~F.text.startswith('/'))
 async def handle_any_message(message: types.Message):
     """Обрабатывает ЛЮБОЕ сообщение в главном меню (кроме команд)"""
-    # Игнорируем кнопки меню
-    menu_buttons = ["📋 Мои задачи", "🎮 Режим игры", "🤖 Режим AI", "ℹ️ Помощь"]
-    if message.text in menu_buttons:
-        return
+    
+    # ВАЖНО: Сначала проверяем ВСЕ кнопки меню
+    all_menu_buttons = [
+        "📋 Мои задачи", "🎮 Режим игры", "🤖 Режим AI", "ℹ️ Помощь",
+        "🎵 Музыка", "🌤️ Погода", "💵 Курсы валют"  # ← ВСЕ новые кнопки
+    ]
+    if message.text in all_menu_buttons:
+        return  # ← Пропускаем ВСЕ кнопки меню
     
     # Игнорируем короткие сообщения
     if len(message.text) < 8:
