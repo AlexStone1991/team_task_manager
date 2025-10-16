@@ -8,7 +8,7 @@ router = Router()
 @router.message(StateFilter(UserStates.main_menu), F.text == "🌤️ Погода")
 async def weather_command(message: types.Message):
     try:
-        city = "Москва"
+        city = "Новомосковск"
         url = f"http://wttr.in/{city}?format=3"
         response = requests.get(url)
         weather = response.text

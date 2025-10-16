@@ -14,11 +14,13 @@ from bot.handlers.start import router as start_router
 from bot.handlers.tasks import router as tasks_router
 from bot.handlers.help import router as help_router
 from bot.handlers.games import router as games_router
-from bot.handlers.music import router as music_router  # ← ДОБАВЬ
-from bot.handlers.weather import router as weather_router  # ← ДОБАВЬ
-from bot.handlers.currency import router as currency_router  # ← ДОБАВЬ
+from bot.handlers.music import router as music_router  
+from bot.handlers.weather import router as weather_router
+from bot.handlers.currency import router as currency_router
 from bot.handlers.menu import router as menu_router
 from bot.handlers.ai_chat import router as ai_chat_router
+from bot.handlers.admin_stats import router as admin_router
+from bot.handlers.quiz import router as quiz_router
 
 
 async def main():
@@ -43,13 +45,17 @@ async def main():
     dp.include_router(tasks_router)
     dp.include_router(help_router)
     dp.include_router(games_router)
-    dp.include_router(music_router)  # ← ДОБАВЬ
-    dp.include_router(weather_router)  # ← ДОБАВЬ
-    dp.include_router(currency_router)  # ← ДОБАВЬ
+    dp.include_router(music_router)  
+    dp.include_router(weather_router)  
+    dp.include_router(currency_router) 
+    dp.include_router(admin_router)
+    dp.include_router(quiz_router) 
     dp.include_router(menu_router)
     dp.include_router(ai_chat_router)
     
     print("🚀 Бот запущен")
+    from bot.utils.daily_report import start_daily_scheduler
+    asyncio.create_task(start_daily_scheduler(bot))
     
     try:
         await dp.start_polling(bot)

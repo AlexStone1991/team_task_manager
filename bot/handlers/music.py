@@ -10,8 +10,10 @@ router = Router()
 @router.message(StateFilter(UserStates.main_menu), F.text == "🎵 Музыка")
 async def music_menu(message: types.Message, state: FSMContext):
     kb = [
-        [types.KeyboardButton(text="📻 Ретро FM"), types.KeyboardButton(text="🎸 Rock FM")],
-        [types.KeyboardButton(text="🎧 GalnetRadio"), types.KeyboardButton(text="🎵 Наше Радио")],
+        [types.KeyboardButton(text="Ретро FM"), types.KeyboardButton(text="Rock FM")],
+        [types.KeyboardButton(text="GalnetRadio"), types.KeyboardButton(text="Наше Радио")],
+        [types.KeyboardButton(text="Ultra"), types.KeyboardButton(text="Radio Maximum")],
+        [types.KeyboardButton(text="Radio Cafe"), types.KeyboardButton(text="Radio Roks")],
         [types.KeyboardButton(text="🔙 Главное меню")]
     ]
     
@@ -22,90 +24,45 @@ async def music_menu(message: types.Message, state: FSMContext):
     await state.set_state(UserStates.music_menu)
 
 # === РАДИОСТАНЦИИ ===
-# === РАДИОСТАНЦИИ ===
-@router.message(StateFilter(UserStates.music_menu), F.text == "📻 Ретро FM")
+@router.message(StateFilter(UserStates.music_menu), F.text == "Ретро FM")
 async def play_retro_fm(message: types.Message):
-    await message.answer(
-        "🎶 <b>Ретро FM</b>\n\n"
-        "Как хотите слушать радио?",
-        reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-            [types.InlineKeyboardButton(text="📱 На телефоне", callback_data="radio_phone_retro")],
-            [types.InlineKeyboardButton(text="💻 На компьютере", callback_data="radio_pc_retro")],
-            [types.InlineKeyboardButton(text="🔗 Просто ссылка", callback_data="radio_link_retro")]
-        ]),
-        parse_mode='HTML'
-    )
+    radio_url = "http://retroserver.streamr.ru:8043/retro256.mp3"
+    await message.answer(f"🎶 Слушаем Ретро FM:\n{radio_url}")
 
-@router.message(StateFilter(UserStates.music_menu), F.text == "🎸 Rock FM")
-async def play_rock_fm(message: types.Message):
-    await message.answer(
-        "🎸 <b>Rock FM</b>\n\n"
-        "Как хотите слушать радио?",
-        reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-            [types.InlineKeyboardButton(text="📱 На телефоне", callback_data="radio_phone_rock")],
-            [types.InlineKeyboardButton(text="💻 На компьютере", callback_data="radio_pc_rock")],
-            [types.InlineKeyboardButton(text="🔗 Просто ссылка", callback_data="radio_link_rock")]
-        ]),
-        parse_mode='HTML'
-    )
+@router.message(StateFilter(UserStates.music_menu), F.text == "Rock FM")
+async def play_energy(message: types.Message):
+    radio_url = "https://nashe1.hostingradio.ru/rock-256"
+    await message.answer(f"🎶 Слушаем Rock FM:\n{radio_url}")
 
-@router.message(StateFilter(UserStates.music_menu), F.text == "🎧 GalnetRadio")
-async def play_galnet_radio(message: types.Message): 
-    await message.answer(
-        "🎧 <b>GalnetRadio</b>\n\n"
-        "Как хотите слушать радио?",
-        reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-            [types.InlineKeyboardButton(text="📱 На телефоне", callback_data="radio_phone_galnet")],
-            [types.InlineKeyboardButton(text="💻 На компьютере", callback_data="radio_pc_galnet")],
-            [types.InlineKeyboardButton(text="🔗 Просто ссылка", callback_data="radio_link_galnet")]
-        ]),
-        parse_mode='HTML'
-    )
+@router.message(StateFilter(UserStates.music_menu), F.text == "Galnet") 
+async def play_europa_plus(message: types.Message):
+    radio_url = "http://galnet.ru:8000/hard"
+    await message.answer(f"🎶 Слушаем Galnet Rock:\n{radio_url}")
 
-@router.message(StateFilter(UserStates.music_menu), F.text == "🎵 Наше Радио")
+@router.message(StateFilter(UserStates.music_menu), F.text == "Наше Радио")
 async def play_nashe_radio(message: types.Message):
-    await message.answer(
-        "🎵 <b>Наше Радио</b>\n\n"
-        "Как хотите слушать радио?",
-        reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
-            [types.InlineKeyboardButton(text="📱 На телефоне", callback_data="radio_phone_nashe")],
-            [types.InlineKeyboardButton(text="💻 На компьютере", callback_data="radio_pc_nashe")],
-            [types.InlineKeyboardButton(text="🔗 Просто ссылка", callback_data="radio_link_nashe")]
-        ]),
-        parse_mode='HTML'
-    )
+    radio_url = "http://nashe1.hostingradio.ru:80/nashe-256"
+    await message.answer(f"🎶 Слушаем Наше Радио:\n{radio_url}")
 
-# === ОБРАБОТЧИК КНОПОК ВЫБОРА ===
-@router.callback_query(F.data.startswith("radio_"))
-async def handle_radio_choice(callback: types.CallbackQuery):
-    action, station = callback.data.split("_")[1:]
-    
-    stations = {
-        "retro": "http://retro.server101.com/retro_256",  # Ретро FM
-        "rock": "https://strm.yandex.ru/cm/rock@341398/master.m3u8",   # Rock FM
-        "galnet": "http://galnet.ru:8000/hard", # Galnet
-        "nashe": "http://nashe1.hostingradio.ru:80/nashe-256"  # Наше Радио
-    }
-    
-    station_names = {
-        "retro": "Ретро FM",
-        "rock": "Rock FM", 
-        "galnet": "GalnetRadio",
-        "nashe": "Наше Радио"
-    }
-    
-    url = stations.get(station, "")
-    name = station_names.get(station, "Радиостанция")
-    
-    if action == "phone":
-        text = f"📱 <b>{name} - Для телефона:</b>\n\n{url}\n\n💡 Откройте ссылку в музыкальном приложении"
-    elif action == "pc":
-        text = f"💻 <b>{name} - Для компьютера:</b>\n\n{url}\n\n💡 Скопируйте ссылку в ваш медиаплеер"
-    else:
-        text = f"🔗 <b>{name} - Ссылка на радио:</b>\n\n{url}"
-    
-    await callback.message.edit_text(text, parse_mode='HTML')
-    await callback.answer()
+@router.message(StateFilter(UserStates.music_menu), F.text == "Ultra")
+async def play_nashe_radio(message: types.Message):
+    radio_url = "https://nashe1.hostingradio.ru/ultra-128.mp3"
+    await message.answer(f"🎶 Слушаем Радио Ультра:\n{radio_url}")
+
+@router.message(StateFilter(UserStates.music_menu), F.text == "Radio Maximum")
+async def play_nashe_radio(message: types.Message):
+    radio_url = "http://maximum.hostingradio.ru/maximum96.aacp"
+    await message.answer(f"🎶 Слушаем Radio Maximum:\n{radio_url}")
+
+@router.message(StateFilter(UserStates.music_menu), F.text == "Radio Cafe")
+async def play_nashe_radio(message: types.Message):
+    radio_url = "https://on.radio-cafe.ru:6050/stream"
+    await message.answer(f"🎶 Слушаем Radio Cafe:\n{radio_url}")
+
+@router.message(StateFilter(UserStates.music_menu), F.text == "Radio Roks")
+async def play_nashe_radio(message: types.Message):
+    radio_url = "http://icecast.radiorocks.cdnvideo.ru/roks.stream"
+    await message.answer(f"🎶 Слушаем Radio Roks:\n{radio_url}")
 
 # === ВОЗВРАТ В ГЛАВНОЕ МЕНЮ ===
 @router.message(StateFilter(UserStates.music_menu), F.text == "🔙 Главное меню")

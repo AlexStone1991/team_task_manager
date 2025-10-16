@@ -29,8 +29,9 @@ async def show_main_menu(message: types.Message):
     keyboard = [
         [types.KeyboardButton(text="📋 Мои задачи")],
         [types.KeyboardButton(text="🎮 Режим игры"), types.KeyboardButton(text="🤖 Режим AI")],
-        [types.KeyboardButton(text="🎵 Музыка"), types.KeyboardButton(text="🌤️ Погода")],  # ← НОВЫЕ КНОПКИ
-        [types.KeyboardButton(text="💵 Курсы валют"), types.KeyboardButton(text="ℹ️ Помощь")]  # ← НОВАЯ КНОПКА
+        [types.KeyboardButton(text="🎵 Музыка"), types.KeyboardButton(text="🌤️ Погода")], 
+        [types.KeyboardButton(text="🧠 Викторина"), types.KeyboardButton(text="📊 Статистика")],
+        [types.KeyboardButton(text="💵 Курсы валют"), types.KeyboardButton(text="ℹ️ Помощь")] 
     ]
     
     reply_markup = types.ReplyKeyboardMarkup(
