@@ -1,10 +1,24 @@
-from aiogram import Router, types
+from aiogram import Router, types, F
 from aiogram.filters import Command
 from asgiref.sync import sync_to_async
 from django.contrib.auth import get_user_model
+from bot.states import UserStates
+from aiogram.filters import StateFilter
 
 User = get_user_model()
 router = Router()
+
+@router.message(StateFilter(UserStates.guest_mode), F.text == "📋 Мои задачи")
+async def guest_tasks_block(message: types.Message):
+    """Блокировка задач для гостей"""
+    await message.answer(
+        "❌ <b>Доступ запрещен</b>\n\n"
+        "Для работы с задачами необходимо зарегистрироваться на сайте.\n\n"
+        "🌐 <b>Сайт:</b> http://127.0.0.1:8000/\n"
+        "📝 <b>Регистрация:</b> http://127.0.0.1:8000/accounts/register/",
+        parse_mode='HTML'
+    )
+
 
 @router.message(Command("tasks"))
 async def show_tasks(message: types.Message):
