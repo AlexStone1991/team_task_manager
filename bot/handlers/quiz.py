@@ -1,37 +1,47 @@
+import json
+import random
 from aiogram import Router, types, F
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-import random
+from bot.states import UserStates
 
 router = Router()
 
 class QuizState(StatesGroup):
     waiting_answer = State()
 
-quiz_questions = [
-    {
-        "question": "Какая столица России?",
-        "options": ["Москва", "Питер", "Казань", "Сочи"],
-        "answer": "Москва"
-    },
-    {
-        "question": "2 + 2 × 2 = ?", 
-        "options": ["6", "8", "4", "10"],
-        "answer": "6"
-    },
-    {
-        "question": "Самый большой океан?",
-        "options": ["Тихий", "Атлантический", "Индийский", "Северный"],
-        "answer": "Тихий"
-    }
-]
+# Загружаем вопросы из JSON
+def load_questions():
+    try:
+        with open('bot/data/quiz_questions.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            return data['questions']
+    except FileNotFoundError:
+        # Если файла нет - возвращаем базовые вопросы
+        return [
+            {
+                "question": "Какая столица России?",
+                "options": ["Москва", "Питер", "Казань", "Сочи"],
+                "answer": "Москва"
+            },
+            {
+                "question": "2 + 2 × 2 = ?", 
+                "options": ["6", "8", "4", "10"],
+                "answer": "6"
+            }
+        ]
 
+quiz_questions = load_questions()
 user_scores = {}
 
 @router.message(Command("quiz"))
 async def start_quiz(message: types.Message, state: FSMContext):
     """Начало викторины"""
+    if not quiz_questions:
+        await message.answer("❌ Вопросы для викторины не загружены!")
+        return
+    
     question = random.choice(quiz_questions)
     
     keyboard = []
@@ -69,13 +79,10 @@ async def check_answer(message: types.Message, state: FSMContext):
         reply_markup=types.ReplyKeyboardMarkup(keyboard=keyboard, resize_keyboard=True)
     )
 
-# ДОБАВЬ ЭТИ ОБРАБОТЧИКИ ДЛЯ КНОПОК
 @router.message(F.text == "🔙 Назад")
 async def back_from_quiz(message: types.Message, state: FSMContext):
-    """Возврат в главное меню из викторины"""
-    await state.clear()
-    
     from bot.handlers.start import show_main_menu
+    await state.set_state(UserStates.main_menu)
     await show_main_menu(message)
 
 @router.message(F.text == "🎮 Еще викторину")

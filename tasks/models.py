@@ -23,7 +23,7 @@ class Task(models.Model):
         choices=STATUS_CHOICES, 
         default='pending', verbose_name="Статус задачи"
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name="Дата создания")
     
     def __str__(self):
         return self.title

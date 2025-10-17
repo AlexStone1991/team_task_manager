@@ -27,6 +27,7 @@ async def start_command(message: types.Message, state: FSMContext):
 async def show_main_menu(message: types.Message):
     """Показать главное меню"""
     keyboard = [
+        [types.KeyboardButton(text="🔄 Старт")],
         [types.KeyboardButton(text="📋 Мои задачи")],
         [types.KeyboardButton(text="🎮 Режим игры"), types.KeyboardButton(text="🤖 Режим AI")],
         [types.KeyboardButton(text="🎵 Музыка"), types.KeyboardButton(text="🌤️ Погода")], 

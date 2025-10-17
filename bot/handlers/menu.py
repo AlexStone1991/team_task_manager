@@ -5,6 +5,12 @@ from aiogram.fsm.context import FSMContext
 
 router = Router()
 
+@router.message(StateFilter(UserStates.main_menu), F.text == "🔄 Старт")
+async def start_button(message: types.Message, state: FSMContext):
+    """Перезапуск бота из главного меню"""
+    from bot.handlers.start import start_command
+    await start_command(message, state)
+
 @router.message(StateFilter(UserStates.main_menu), F.text == "📋 Мои задачи")
 async def show_tasks_button(message: types.Message):
     """Показать задачи из главного меню"""
