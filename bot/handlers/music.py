@@ -11,7 +11,7 @@ router = Router()
 async def music_menu(message: types.Message, state: FSMContext):
     kb = [
         [types.KeyboardButton(text="Ретро FM"), types.KeyboardButton(text="Rock FM")],
-        [types.KeyboardButton(text="GalnetRadio"), types.KeyboardButton(text="Наше Радио")],
+        [types.KeyboardButton(text="Galnet"), types.KeyboardButton(text="Наше Радио")],
         [types.KeyboardButton(text="Ultra"), types.KeyboardButton(text="Radio Maximum")],
         [types.KeyboardButton(text="Radio Cafe"), types.KeyboardButton(text="Radio Roks")],
         [types.KeyboardButton(text="🔙 Главное меню")]
